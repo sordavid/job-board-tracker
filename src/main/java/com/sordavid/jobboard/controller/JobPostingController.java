@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sordavid.jobboard.model.JobPosting;
 import com.sordavid.jobboard.repository.JobPostingRepository;
 
+import jakarta.validation.Valid;
+import com.sordavid.jobboard.dto.CreateJobPostingRequest;
+
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -33,7 +36,13 @@ public class JobPostingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public JobPosting createJob(@RequestBody JobPosting jobPosting) {
+    public JobPosting createJob(@Valid @RequestBody CreateJobPostingRequest request) {
+        JobPosting jobPosting = new JobPosting(
+                request.companyName(),
+                request.jobTitle(),
+                request.location(),
+                request.jobUrl());
+        
         return repository.save(jobPosting);
     }
 
