@@ -20,7 +20,7 @@ import com.sordavid.jobboard.dto.CreateJobPostingRequest;
 
 
 @RestController
-@RequestMapping("/api/jobs")
+@RequestMapping("/api")
 public class JobPostingController {
 
     private final JobPostingRepository repository;
@@ -29,12 +29,12 @@ public class JobPostingController {
         this.repository = repository;
     }
 
-    @GetMapping
+    @GetMapping("/get-all-jobs")
     public List<JobPosting> getAllJobs() {
         return repository.findAll();
     }
 
-    @PostMapping
+    @PostMapping("/jobs")
     @ResponseStatus(HttpStatus.CREATED)
     public JobPosting createJob(@Valid @RequestBody CreateJobPostingRequest request) {
         JobPosting jobPosting = new JobPosting(
@@ -46,7 +46,7 @@ public class JobPostingController {
         return repository.save(jobPosting);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/jobs/{id}")
     public ResponseEntity<JobPosting> getJobById(@PathVariable Long id) {
         return repository.findById(id)
                 .map(ResponseEntity::ok)
